@@ -414,20 +414,38 @@ app.post('/api/verify-payment', async (req, res) => {
 app.get('/api/admin/payments', requireAdmin, async (req, res) => {
   try {
     const response = await fetch(
-      'https://api.paystack.co/transaction?perPage=100&status=success',
+      'https://api.paystack.co/transaction?perPage=100',
       { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` } }
     );
     const data = await response.json();
-    const transactions = (data.data ?? []).map((t) => ({
-      reference: t.reference,
-      amount: t.amount,
-      status: t.status,
-      channel: t.channel,
-      currency: t.currency,
-      customerName: [t.customer?.first_name, t.customer?.last_name].filter(Boolean).join(' ') || t.customer?.email || '—',
-      customerEmail: t.customer?.email ?? '—',
-      paidAt: t.paid_at,
-    }));
+
+    function getMeta(fields, key) {
+      if (!Array.isArray(fields)) return '';
+      return fields.find((f) => f.variable_name === key)?.value ?? '';
+    }
+
+    const transactions = (data.data ?? []).map((t) => {
+      const meta = t.metadata?.custom_fields ?? [];
+      const metaName = getMeta(meta, 'full_name');
+      const customerName =
+        metaName ||
+        [t.customer?.first_name, t.customer?.last_name].filter(Boolean).join(' ') ||
+        t.customer?.email ||
+        '—';
+      return {
+        reference: t.reference,
+        amount: t.amount,
+        status: t.status,
+        channel: t.channel,
+        currency: t.currency,
+        customerName,
+        customerEmail: t.customer?.email ?? '—',
+        phone: getMeta(meta, 'phone'),
+        property: getMeta(meta, 'property'),
+        intent: getMeta(meta, 'intent'),
+        paidAt: t.paid_at,
+      };
+    });
     res.json(transactions);
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch payments', detail: e?.message });
