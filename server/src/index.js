@@ -388,6 +388,66 @@ app.put('/api/bookings/:id/status', requireAdmin, async (req, res) => {
   }
 });
 
+
+// ── Paystack Payments ─────────────────────────────────────────────────────────
+
+app.post('/api/verify-payment', async (req, res) => {
+  const { reference } = req.body || {};
+  if (!reference) return res.status(400).json({ error: 'reference is required' });
+
+  try {
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+      { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` } }
+    );
+    const data = await response.json();
+    if (data.data?.status === 'success') {
+      res.json({ success: true, data: data.data });
+    } else {
+      res.status(400).json({ success: false, error: 'Payment not successful' });
+    }
+  } catch (e) {
+    res.status(500).json({ error: 'Verification failed', detail: e?.message });
+  }
+});
+
+app.get('/api/admin/payments', requireAdmin, async (req, res) => {
+  try {
+    const response = await fetch(
+      'https://api.paystack.co/transaction?perPage=100&status=success',
+      { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` } }
+    );
+    const data = await response.json();
+    const transactions = (data.data ?? []).map((t) => ({
+      reference: t.reference,
+      amount: t.amount,
+      status: t.status,
+      channel: t.channel,
+      currency: t.currency,
+      customerName: [t.customer?.first_name, t.customer?.last_name].filter(Boolean).join(' ') || t.customer?.email || '—',
+      customerEmail: t.customer?.email ?? '—',
+      paidAt: t.paid_at,
+    }));
+    res.json(transactions);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch payments', detail: e?.message });
+  }
+});
+
+app.get('/api/admin/payments/:reference', requireAdmin, async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(req.params.reference)}`,
+      { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` } }
+    );
+    const data = await response.json();
+    if (!data.data) return res.status(404).json({ error: 'Transaction not found' });
+    res.json(data.data);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch receipt', detail: e?.message });
+  }
+});
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`API server listening on port ${PORT}`);
