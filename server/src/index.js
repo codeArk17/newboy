@@ -19,7 +19,11 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","X-Admin-Key","Authorization"]
+}));
 app.use(express.json());
 
 const LISTING_TYPES = ['Rent', 'Sale'];
