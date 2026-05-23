@@ -466,6 +466,15 @@ app.get('/api/admin/payments/:reference', requireAdmin, async (req, res) => {
   }
 });
 
+
+// ── Serve React frontend ──────────────────────────────────────────────────────
+const path = require('path');
+const DIST = path.join(__dirname, '..', 'dist');
+app.use(express.static(DIST));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST, 'index.html'));
+});
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`API server listening on port ${PORT}`);
