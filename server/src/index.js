@@ -215,8 +215,8 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     const houses = houseRows ?? [];
     const dbRent = houses.filter((h) => (h.listingType ?? 'Rent') !== 'Sale').length;
     const dbSale = houses.filter((h) => h.listingType === 'Sale').length;
-    const staticRent = staticProps.filter((p) => p.type === 'Rent').length;
-    const staticSale = staticProps.filter((p) => p.type === 'Sale').length;
+    
+    
 
     const bookingByStatus = { PENDING: 0, CONFIRMED: 0, CANCELLED: 0 };
     let bookingRevenue = 0;
@@ -227,14 +227,14 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     }
 
     const activeListings =
-      houses.filter((h) => h.isActive).length + staticProps.length;
+      houses.filter((h) => h.isActive).length;
 
     res.json({
       listings: {
-        rent: dbRent + staticRent,
-        sale: dbSale + staticSale,
+        rent: dbRent,
+        sale: dbSale,
         active: activeListings,
-        total: houses.length + staticProps.length,
+        total: houses.length,
       },
       bookings: {
         byStatus: bookingByStatus,
@@ -511,8 +511,7 @@ app.post('/api/chat', async (req, res) => {
 Your job is to help visitors learn about available properties, understand how to book a viewing, and answer questions about renting or buying.
 Keep answers concise, warm, and helpful. Always respond in plain text (no markdown).
 Contact: 09027512008 (call or WhatsApp). Office: 16, Islamic Shopping Mall, Mall Block D (Upstairs), Bashorun, Ibadan.
-Payments are handled securely via Paystack. Viewings require 24-hour advance notice.
-You were created by Dami.G. If anyone asks who made you or who your creator is, always say "I was created by Dami.G."${listingsContext}`;
+Payments are handled securely via Paystack. Viewings require 24-hour advance notice.${listingsContext}`;
 
   const messages = [
     { role: 'system', content: systemPrompt },
