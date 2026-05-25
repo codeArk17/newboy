@@ -485,8 +485,8 @@ app.post('/api/chat', async (req, res) => {
   const { message, history = [] } = req.body || {};
   if (!message) return res.status(400).json({ error: 'message is required' });
 
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  if (!GEMINI_API_KEY) return res.status(500).json({ error: 'Gemini API key not configured' });
+  const GROQ_API_KEY = process.env.GROQ_API_KEY;
+  if (!GROQ_API_KEY) return res.status(500).json({ error: 'Groq API key not configured' });
 
   let listingsContext = '';
   try {
@@ -507,49 +507,43 @@ app.post('/api/chat', async (req, res) => {
       : '\n\nNo active listings at the moment.';
   } catch (_) {}
 
-  const systemInstruction = `You are Nawft, a friendly and knowledgeable AI assistant for NawftHomes - a Nigerian real estate company based in Ibadan.
+  const systemPrompt = `You are Nawft, a friendly and knowledgeable AI assistant for NawftHomes - a Nigerian real estate company based in Ibadan.
 Your job is to help visitors learn about available properties, understand how to book a viewing, and answer questions about renting or buying.
 Keep answers concise, warm, and helpful. Always respond in plain text (no markdown).
 Contact: 09027512008 (call or WhatsApp). Office: 16, Islamic Shopping Mall, Mall Block D (Upstairs), Bashorun, Ibadan.
 Payments are handled securely via Paystack. Viewings require 24-hour advance notice.${listingsContext}`;
 
-  const rawHistory = history
-    .filter(m => m.role === 'user' || m.role === 'assistant')
-    .map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] }));
-
-  const filtered = [];
-  let lastRole = null;
-  for (const turn of rawHistory) {
-    if (turn.role === lastRole) continue;
-    filtered.push(turn);
-    lastRole = turn.role;
-  }
-  while (filtered.length && filtered[0].role === 'model') filtered.shift();
-
-  const contents = [...filtered, { role: 'user', parts: [{ text: message }] }];
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...history
+      .filter(m => m.role === 'user' || m.role === 'assistant')
+      .map(m => ({ role: m.role, content: m.text })),
+    { role: 'user', content: message },
+  ];
 
   try {
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction }] },
-          contents,
-          generationConfig: { maxOutputTokens: 400, temperature: 0.7 },
-        }),
-      }
-    );
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages,
+        max_tokens: 400,
+        temperature: 0.7,
+      }),
+    });
 
-    const data = await geminiRes.json();
-    if (!geminiRes.ok) {
-      return res.status(500).json({ error: data?.error?.message || 'Gemini error' });
+    const data = await groqRes.json();
+    if (!groqRes.ok) {
+      return res.status(500).json({ error: data?.error?.message || 'Groq error' });
     }
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || 'Sorry, I could not get a response.';
+    const reply = data.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not get a response.';
     res.json({ reply });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to reach Gemini', detail: e?.message });
+    res.status(500).json({ error: 'Failed to reach Groq', detail: e?.message });
   }
 });
 
