@@ -15,6 +15,8 @@ const {
   nextPropertyId,
 } = require('./propertiesStore');
 
+const multer = require('multer');
+
 dotenv.config();
 const prisma = new PrismaClient();
 
@@ -26,6 +28,26 @@ if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 const propertiesFile = path.join(dataDir, 'properties.json');
 if (!fs.existsSync(propertiesFile)) fs.writeFileSync(propertiesFile, '[]', 'utf-8');
 
+// ── Uploads directory ─────────────────────────────────────────────────────────
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadsDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
+    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`);
+  },
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  fileFilter: (_req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    cb(null, allowed.includes(file.mimetype));
+  },
+});
+
 const app = express();
 app.use(cors({
   origin: "*",
@@ -33,6 +55,21 @@ app.use(cors({
   allowedHeaders: ["Content-Type","X-Admin-Key","Authorization"]
 }));
 app.use(express.json());
+
+// Serve uploaded images as static files
+app.use('/uploads', express.static(uploadsDir));
+
+// ── Image upload ──────────────────────────────────────────────────────────────
+app.post('/api/admin/upload', requireAdmin, upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file received or file type not allowed.' });
+  }
+  // Build a fully-qualified public URL the frontend can use
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  const host = req.headers['x-forwarded-host'] || req.get('host');
+  const url = `${protocol}://${host}/uploads/${req.file.filename}`;
+  res.json({ url });
+});
 
 const LISTING_TYPES = ['Rent', 'Sale'];
 
@@ -115,6 +152,9 @@ function buildHouseData(body, { partial = false } = {}) {
     data.sqft = Number.isFinite(Number(body.sqft)) ? Math.max(0, Number(body.sqft)) : 0;
   }
   if (body.imageUrl !== undefined) data.imageUrl = body.imageUrl ? String(body.imageUrl) : null;
+  if (body.subImageUrls !== undefined) {
+    data.subImageUrls = Array.isArray(body.subImageUrls) ? body.subImageUrls : [];
+  }
   if (body.videoTourUrl !== undefined) {
     const videoCheck = validateVideoTourUrl(body.videoTourUrl);
     if (!videoCheck.ok) return { error: videoCheck.error };
