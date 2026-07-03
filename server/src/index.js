@@ -106,12 +106,14 @@ function normalizeListingType(raw) {
 // ── Health ────────────────────────────────────────────────────────────────────
 
 app.get('/health', async (req, res) => {
+  let dbOk = false;
   try {
     await prisma.$queryRaw`SELECT 1`;
-    res.json({ ok: true });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: 'DB error' });
-  }
+    dbOk = true;
+  } catch (_) {}
+  // Always return 200 so the frontend knows the server is up.
+  // The db field tells you whether the database connection is healthy.
+  res.json({ ok: true, db: dbOk });
 });
 
 // ── Properties (static file, public read) ─────────────────────────────────────
