@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: newboy-1
+    runtime: node
+    rootDir: server
+    buildCommand: npm install && npx prisma generate
+    startCommand: node src/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
