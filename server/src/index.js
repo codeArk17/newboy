@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 const { PrismaClient } = require('@prisma/client');
 const {
   validatePricePerNight,
@@ -16,13 +19,9 @@ const {
 } = require('./propertiesStore');
 
 const multer = require('multer');
-
-dotenv.config({ path: require('path').join(__dirname, '..', '.env') });
 const prisma = new PrismaClient();
 
 // Ensure the data directory exists so propertiesStore.js never throws on first run
-const fs = require('fs');
-const path = require('path');
 const dataDir = path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 const propertiesFile = path.join(dataDir, 'properties.json');
