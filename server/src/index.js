@@ -17,7 +17,7 @@ const {
 
 const multer = require('multer');
 
-dotenv.config();
+dotenv.config({ path: require('path').join(__dirname, '..', '.env') });
 const prisma = new PrismaClient();
 
 // Ensure the data directory exists so propertiesStore.js never throws on first run
