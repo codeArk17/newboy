@@ -1,6 +1,16 @@
 /** Admin API key from header X-Admin-Key or Authorization: Bearer <key> */
+let runtimeAdminKey = null // overrides env at runtime after a key change
+
+function getExpectedKey() {
+  return runtimeAdminKey || process.env.ADMIN_KEY || 'admin123'
+}
+
+function setRuntimeKey(newKey) {
+  runtimeAdminKey = newKey
+}
+
 function requireAdmin(req, res, next) {
-  const expected = process.env.ADMIN_KEY || 'admin123'
+  const expected = getExpectedKey()
   const headerKey = req.headers['x-admin-key']
   const bearer = req.headers.authorization?.startsWith('Bearer ')
     ? req.headers.authorization.slice(7)
@@ -13,4 +23,4 @@ function requireAdmin(req, res, next) {
   next()
 }
 
-module.exports = { requireAdmin }
+module.exports = { requireAdmin, getExpectedKey, setRuntimeKey }

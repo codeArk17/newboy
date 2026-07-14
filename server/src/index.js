@@ -8,7 +8,7 @@ const {
   toPriceBigInt,
   fromPriceBigInt,
 } = require('./validation');
-const { requireAdmin } = require('./adminAuth');
+const { requireAdmin, getExpectedKey, setRuntimeKey } = require('./adminAuth');
 const {
   readProperties,
   writeProperties,
@@ -237,6 +237,18 @@ app.delete('/api/houses/:id', requireAdmin, async (req, res) => {
 /** Lightweight check for admin login (no DB schema dependencies). */
 app.get('/api/admin/verify', requireAdmin, (req, res) => {
   res.json({ ok: true });
+});
+
+/** Change the admin key — requires the current key to authenticate. */
+app.put('/api/admin/key', requireAdmin, (req, res) => {
+  const { newKey } = req.body || {};
+  if (!newKey || typeof newKey !== 'string' || newKey.trim().length < 6) {
+    return res.status(400).json({ error: 'New key must be at least 6 characters.' });
+  }
+  const trimmed = newKey.trim();
+  setRuntimeKey(trimmed);
+  process.env.ADMIN_KEY = trimmed;
+  res.json({ ok: true, message: 'Admin key updated successfully.' });
 });
 
 app.get('/api/admin/houses', requireAdmin, async (req, res) => {
