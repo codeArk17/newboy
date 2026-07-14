@@ -1,9 +1,10 @@
 [
   {
     "id": 1,
-    "title": "Willemsparkweg 154",
-    "city": "Amsterdam South",
-    "price": "₦1,250,000",
+    "title": "4 Bedroom Detached Duplex",
+    "city": "Ibadan",
+    "address": "Bodija Estate, Ibadan",
+    "price": "₦120,000,000",
     "bedrooms": 4,
     "bathrooms": 3,
     "sqft": 3100,
@@ -15,35 +16,33 @@
       "https://images.unsplash.com/photo-1600585154154-1e8a1cc28b3e?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/mov_bbb.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 2,
-    "title": "bungalow",
-    "city": "ibadan",
-    "price": "₦3,750 / month",
+    "title": "2 Bedroom Bungalow",
+    "city": "Ibadan",
+    "address": "Bashorun, Ibadan",
+    "price": "₦350,000 / year",
     "bedrooms": 2,
     "bathrooms": 2,
     "sqft": 1450,
     "type": "Rent",
-    "badge": "Expat Rental",
+    "badge": "Available",
     "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1560184897-ae75f418493e?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/movie.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 3,
-    "title": "Valeriusstraat 208",
-    "city": "Amsterdam South",
-    "price": "₦925,000",
+    "title": "3 Bedroom Semi-Detached",
+    "city": "Ibadan",
+    "address": "New Bodija, Ibadan",
+    "price": "₦75,000,000",
     "bedrooms": 3,
     "bathrooms": 2,
     "sqft": 1780,
@@ -55,55 +54,52 @@
       "https://images.unsplash.com/photo-1502005230044-6b2a3c5b9a07?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/movie.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 4,
-    "title": "Prinsengracht 128",
-    "city": "Amsterdam Center",
-    "price": "₦4,900 / month",
+    "title": "3 Bedroom Flat",
+    "city": "Ibadan",
+    "address": "Oluyole Estate, Ibadan",
+    "price": "₦500,000 / year",
     "bedrooms": 3,
     "bathrooms": 2,
     "sqft": 2200,
     "type": "Rent",
-    "badge": "Rented",
+    "badge": "Available",
     "image": "https://images.unsplash.com/photo-1600566753151-384129cf4e3e?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
       "https://images.unsplash.com/photo-1600566753151-384129cf4e3e?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1496412705862-e0088f16f791?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1560448075-bb4caa6c8f66?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/mov_bbb.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 5,
-    "title": "Keizersgracht 401",
-    "city": "Amsterdam Canal District",
-    "price": "₦2,100,000",
+    "title": "5 Bedroom Mansion",
+    "city": "Ibadan",
+    "address": "Jericho GRA, Ibadan",
+    "price": "₦280,000,000",
     "bedrooms": 5,
     "bathrooms": 4,
     "sqft": 3500,
     "type": "Sale",
-    "badge": "Historic",
+    "badge": "Luxury",
     "image": "https://images.unsplash.com/photo-1502005230044-6b2a3c5b9a07?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
       "https://images.unsplash.com/photo-1502005230044-6b2a3c5b9a07?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1505691723518-36a5ac3b2d95?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/mov_bbb.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 6,
-    "title": "Van Baerlestraat 92",
-    "city": "Amsterdam Museum Quarter",
-    "price": "₦3,250 / month",
+    "title": "2 Bedroom Apartment",
+    "city": "Ibadan",
+    "address": "Akobo, Ibadan",
+    "price": "₦400,000 / year",
     "bedrooms": 2,
     "bathrooms": 1,
     "sqft": 1200,
@@ -115,48 +111,43 @@
       "https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/mov_bbb.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 7,
-    "title": "Vondelstraat 16",
-    "city": "Amsterdam West",
-    "price": "₦1,150,000",
+    "title": "3 Bedroom Terrace",
+    "city": "Ibadan",
+    "address": "Agodi GRA, Ibadan",
+    "price": "₦90,000,000",
     "bedrooms": 3,
     "bathrooms": 2,
     "sqft": 1650,
     "type": "Sale",
-    "badge": "Garden",
+    "badge": "Available",
     "image": "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
       "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/movie.mp4"
-    ]
+    "videos": []
   },
   {
     "id": 8,
-    "title": "Nieuwe Spiegelstraat 28",
-    "city": "london",
-    "price": "₦2,950 / month",
-    "bedrooms": 7,
+    "title": "Luxury Short Stay Suite",
+    "city": "Ibadan",
+    "address": "Ring Road, Ibadan",
+    "price": "₦75,000 / night",
+    "bedrooms": 2,
     "bathrooms": 2,
     "sqft": 900,
     "type": "Rent",
-    "badge": "Furnished",
+    "badge": "Luxury",
     "image": "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
       "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1600&q=80"
     ],
-    "videos": [
-      "https://www.w3schools.com/html/movie.mp4"
-    ]
+    "videos": []
   }
 ]
